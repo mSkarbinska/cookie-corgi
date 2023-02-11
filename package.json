@@ -1,0 +1,45 @@
+{
+	"name": "cookie-corgi",
+	"version": "0.0.1",
+	"publisher": "vscode-samples",
+	"private": true,
+	"license": "MIT",
+	"engines": {
+		"vscode": "^1.74.0"
+	},
+	"extensionKind": [
+		"ui",
+		"workspace"
+	],
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [],
+	"main": "./out/extension.js",
+	"contributes": {
+		"views": {
+			"explorer": [
+				{
+					"type": "webview",
+					"id": "cookieCorgi.corgiView",
+					"name": "Cookie Corgi"
+				}
+			]
+		},
+		"commands": [
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"lint": "eslint \"src/**/*.ts\"",
+		"watch": "tsc -w -p ./"
+	},
+	"devDependencies": {
+		"@types/vscode": "^1.73.0",
+		"@typescript-eslint/eslint-plugin": "^5.48.2",
+		"@typescript-eslint/parser": "^5.48.2",
+		"eslint": "^8.32.0",
+		"typescript": "^4.9.4"
+	}
+}
