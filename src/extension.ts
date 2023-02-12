@@ -38,7 +38,7 @@ class CorgiViewProvider implements vscode.WebviewViewProvider {
 
 		webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
 
-		this.showCorgi(this._extensionUri);
+		this.setupCorgi(this._extensionUri);
 
 		webviewView.webview.onDidReceiveMessage(data => {
 			switch (data.type) {
@@ -51,13 +51,17 @@ class CorgiViewProvider implements vscode.WebviewViewProvider {
 		});
 	}
 
-	public showCorgi(extensionUri: vscode.Uri) {
+	public setupCorgi(extensionUri: vscode.Uri) {
 		const webview = this._view.webview;
 
 		const onDiskPath = vscode.Uri.joinPath(extensionUri, 'media', 'corgi.gif');
 		const corgiGifSrc = webview.asWebviewUri(onDiskPath);
+		const sleepingCorgiOnDiskPath = vscode.Uri.joinPath(extensionUri, 'media', 'sleeping-corgi.gif');
+		const sleepingCorgiGifSrc = webview.asWebviewUri(sleepingCorgiOnDiskPath);
 
-		this._view.webview.postMessage({ command: 'showCorgi', text: String(corgiGifSrc) });
+		this._view.webview.postMessage({ command: 'showCorgi', text:String(corgiGifSrc) });
+		this._view.webview.postMessage({ command: 'setSleepingCorgi', text:String(sleepingCorgiGifSrc) });
+
 	}
 
 	public pet(extensionUri: vscode.Uri) {
@@ -89,10 +93,13 @@ class CorgiViewProvider implements vscode.WebviewViewProvider {
 
 				<meta name="viewport" content="width=device-width, initial-scale=1.0">
 				<link href="${styleMainUri}" rel="stylesheet">
+
+
 				<title>Cookie Corgi</title>
 			</head>
 			<body>
 				<script nonce="${nonce}" src="${scriptUri}"></script>
+
 			</body>
 			</html>`;
 	}
