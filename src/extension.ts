@@ -58,10 +58,12 @@ class CorgiViewProvider implements vscode.WebviewViewProvider {
 		const corgiGifSrc = webview.asWebviewUri(onDiskPath);
 		const sleepingCorgiOnDiskPath = vscode.Uri.joinPath(extensionUri, 'media', 'sleeping-corgi.gif');
 		const sleepingCorgiGifSrc = webview.asWebviewUri(sleepingCorgiOnDiskPath);
+		const cookieOnDiskPath = vscode.Uri.joinPath(extensionUri, 'media', 'whole-cookie.png');
+		const cookieGifSrc = webview.asWebviewUri(cookieOnDiskPath);
 
 		this._view.webview.postMessage({ command: 'showCorgi', text:String(corgiGifSrc) });
 		this._view.webview.postMessage({ command: 'setSleepingCorgi', text:String(sleepingCorgiGifSrc) });
-
+		this._view.webview.postMessage({ command: 'setCookie', text:String(cookieGifSrc) });
 	}
 
 	public pet(extensionUri: vscode.Uri) {
