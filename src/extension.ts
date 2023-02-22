@@ -11,6 +11,10 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
 		vscode.commands.registerCommand('cookieCorgi.pet', () => provider.pet(context.extensionUri))
 	);
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand('cookieCorgi.chomp', () => provider.chomp(context.extensionUri))
+	);
 }
 
 class CorgiViewProvider implements vscode.WebviewViewProvider {
@@ -47,8 +51,13 @@ class CorgiViewProvider implements vscode.WebviewViewProvider {
 						this.pet(this._extensionUri);
 						break;
 					}
-			}
-		});
+				case 'chomp':
+					{
+						this.chomp(this._extensionUri);
+						break;
+					}
+				}
+				});
 	}
 
 	public setupCorgi(extensionUri: vscode.Uri) {
@@ -56,8 +65,10 @@ class CorgiViewProvider implements vscode.WebviewViewProvider {
 
 		const onDiskPath = vscode.Uri.joinPath(extensionUri, 'media', 'corgi.gif');
 		const corgiGifSrc = webview.asWebviewUri(onDiskPath);
+
 		const sleepingCorgiOnDiskPath = vscode.Uri.joinPath(extensionUri, 'media', 'sleeping-corgi.gif');
 		const sleepingCorgiGifSrc = webview.asWebviewUri(sleepingCorgiOnDiskPath);
+
 		const cookieOnDiskPath = vscode.Uri.joinPath(extensionUri, 'media', 'whole-cookie.png');
 		const cookieGifSrc = webview.asWebviewUri(cookieOnDiskPath);
 
@@ -73,6 +84,15 @@ class CorgiViewProvider implements vscode.WebviewViewProvider {
 		const corgiGifSrc = webview.asWebviewUri(onDiskPath);
 
 		this._view.webview.postMessage({ command: 'pet', text: String(corgiGifSrc) });
+	}
+
+	public chomp(extensionUri: vscode.Uri) {
+		const webview = this._view.webview;
+
+		const onDiskPath = vscode.Uri.joinPath(extensionUri, 'media', 'chomping-corgi.gif');
+		const corgiGifSrc = webview.asWebviewUri(onDiskPath);
+
+		this._view.webview.postMessage({ command: 'chomp', text: String(corgiGifSrc) });
 	}
 
 	private _getHtmlForWebview(webview: vscode.Webview) {

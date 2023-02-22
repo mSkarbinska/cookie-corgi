@@ -3,6 +3,7 @@
 let IDLE_CORGI ="";
 let SLEEPING_CORGI = "";
 let LOVING_CORGI ="";
+let CHOMPING_CORGI = "";
 
 let COOKIE = "";
 
@@ -18,10 +19,7 @@ let COOKIE = "";
 
     let corgi = document.createElement('img');
     corgi.className = "corgi";
-    corgi.ondragleave = function(event) {
-        event.preventDefault();
-        console.log("chomp");
-    };
+
     document.body.appendChild(corgi);
 
     window.addEventListener('message', event => {
@@ -35,6 +33,10 @@ let COOKIE = "";
                 corgi.addEventListener('click', () => {
                     vscode.postMessage({type: 'pet'});
                 });
+                corgi.ondragleave = (event) => {
+                    event.preventDefault();
+                    vscode.postMessage({type: 'chomp'});
+                };
                 break;
             }
             case 'setSleepingCorgi':{
@@ -52,6 +54,15 @@ let COOKIE = "";
                     img.src = IDLE_CORGI;
                 }, 1000);
 
+                break;
+            }
+            case 'chomp':{
+                let img = document.getElementById('corgi');
+                CHOMPING_CORGI = message.text;
+                img.src = CHOMPING_CORGI;
+                setTimeout(() => {
+                    img.src = IDLE_CORGI;
+                }, 1000);
                 break;
             }
             case 'setCookie':{
