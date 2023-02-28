@@ -9,12 +9,10 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.window.registerWebviewViewProvider(CorgiViewProvider.viewType, provider));
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand('cookieCorgi.pet', () => provider.pet(context.extensionUri))
-	);
+		vscode.commands.registerCommand('cookieCorgi.pet', () => provider.pet(context.extensionUri)));
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand('cookieCorgi.chomp', () => provider.chomp(context.extensionUri))
-	);
+		vscode.commands.registerCommand('cookieCorgi.chomp', () => provider.chomp(context.extensionUri)));
 }
 
 class CorgiViewProvider implements vscode.WebviewViewProvider {
@@ -22,7 +20,6 @@ class CorgiViewProvider implements vscode.WebviewViewProvider {
 	public static readonly viewType = 'cookieCorgi.corgiView';
 
 	private _view?: vscode.WebviewView;
-
 
 	constructor(
 		private readonly _extensionUri: vscode.Uri,
@@ -39,7 +36,6 @@ class CorgiViewProvider implements vscode.WebviewViewProvider {
 			enableScripts: true,
 			localResourceRoots: [vscode.Uri.joinPath(this._extensionUri, 'media')],
 		};
-
 		webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
 
 		this.setupCorgi(this._extensionUri);
