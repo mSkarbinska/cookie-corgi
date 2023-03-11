@@ -36,6 +36,11 @@
 				"command": "cookieCorgi.chomp",
 				"title": "Give Corgi a cookie (only chocolate chips cookies allowed)",
 				"category": "Cookie Corgi"
+			},
+			{
+				"command": "cookieCorgi.sleep",
+				"title": "Put Corgi to sleep",
+				"category": "Cookie Corgi"
 			}
 		]
 	},

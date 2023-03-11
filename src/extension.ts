@@ -13,6 +13,10 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(
 		vscode.commands.registerCommand('cookieCorgi.chomp', () => provider.chomp(context.extensionUri)));
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand('cookieCorgi.sleep', () => provider.sleep(context.extensionUri)));
+
 }
 
 class CorgiViewProvider implements vscode.WebviewViewProvider {
@@ -50,6 +54,11 @@ class CorgiViewProvider implements vscode.WebviewViewProvider {
 				case 'chomp':
 					{
 						this.chomp(this._extensionUri);
+						break;
+					}
+				case 'sleep':
+					{
+						this.sleep(this._extensionUri);
 						break;
 					}
 				}
@@ -91,6 +100,15 @@ class CorgiViewProvider implements vscode.WebviewViewProvider {
 		this._view.webview.postMessage({ command: 'chomp', text: String(corgiGifSrc) });
 	}
 
+	public sleep(extensionUri: vscode.Uri) {
+		const webview = this._view.webview;
+
+		const onDiskPath = vscode.Uri.joinPath(extensionUri, 'media', 'sleeping-corgi.gif');
+		const corgiGifSrc = webview.asWebviewUri(onDiskPath);
+
+		this._view.webview.postMessage({ command: 'sleep', text: String(corgiGifSrc) });
+	}
+
 	private _getHtmlForWebview(webview: vscode.Webview) {
 		const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.js'));
 		const styleMainUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.css'));
@@ -117,7 +135,6 @@ class CorgiViewProvider implements vscode.WebviewViewProvider {
 			</head>
 			<body>
 				<script nonce="${nonce}" src="${scriptUri}"></script>
-
 			</body>
 			</html>`;
 	}

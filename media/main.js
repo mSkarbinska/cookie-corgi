@@ -11,30 +11,41 @@
     let SLEEPING_CORGI = previousState?.SLEEPING_CORGI ?? "";
     let LOVING_CORGI = previousState?.LOVING_CORGI ?? "";
     let CHOMPING_CORGI = previousState?.CHOMPING_CORGI ?? "";
-
+    
     let COOKIE = previousState?.COOKIE ?? "";
 
     let cookie = document.createElement('img');
     cookie.className = "cookie";
     cookie.draggable = true;
     cookie.src = COOKIE;
+    
+    cookie.ondragstart = (event) => {
+        event.dataTransfer.setData('text/plain', 'cookie');
+        event.dataTransfer.dropEffect = 'none';
+        event.target.style.cursor = 'grab';
+    };
+
+    document.body.appendChild(cookie);
 
     let corgi = document.createElement('img');
     corgi.id="corgi";
     corgi.src = IDLE_CORGI; 
-
-    document.body.appendChild(cookie);
     document.body.appendChild(corgi);
-
+    
     corgi.addEventListener('click', () => {
         vscode.postMessage({type: 'pet'});
     });
-
-    corgi.ondragleave = (event) => {
+    corgi.ondragover = (event) => {
+        event.preventDefault();
+    };
+    corgi.ondrop = (event) => {
         event.preventDefault();
         vscode.postMessage({type: 'chomp'});
     };
-    
+    document.body.ondragover = (event) => {
+        event.preventDefault();
+    };
+
     window.addEventListener('message', event => {
         const message = event.data; 
 
@@ -63,6 +74,20 @@
 
                 break;
             }
+            case 'sleep':{
+                let img = document.getElementById('corgi');
+                SLEEPING_CORGI = message.text;
+                vscode.setState({...previousState, SLEEPING_CORGI});
+                img.src = SLEEPING_CORGI;
+                break;
+            }
+            case 'wake':{
+                let img = document.getElementById('corgi');
+                IDLE_CORGI = message.text;
+                vscode.setState({...previousState, IDLE_CORGI});
+                img.src = IDLE_CORGI;
+                break;
+            }
             case 'chomp':{
                 let img = document.getElementById('corgi');
                 CHOMPING_CORGI = message.text;
@@ -85,5 +110,5 @@
 function isSleepTime() {
     let now = new Date();
     let hour = now.getHours();
-    return hour >= 23 || hour <= 7;
+    return hour >=23 || hour <= 7;
 }
