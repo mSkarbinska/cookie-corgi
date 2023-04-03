@@ -11,9 +11,9 @@
     let SLEEPING_CORGI = previousState?.SLEEPING_CORGI ?? "";
     let LOVING_CORGI = previousState?.LOVING_CORGI ?? "";
     let CHOMPING_CORGI = previousState?.CHOMPING_CORGI ?? "";
-    
     let COOKIE = previousState?.COOKIE ?? "";
 
+    // cookie
     let cookie = document.createElement('img');
     cookie.className = "cookie";
     cookie.draggable = true;
@@ -27,6 +27,7 @@
 
     document.body.appendChild(cookie);
 
+    // corgi
     let corgi = document.createElement('img');
     corgi.id="corgi";
     corgi.src = IDLE_CORGI; 
@@ -42,6 +43,8 @@
         event.preventDefault();
         vscode.postMessage({type: 'chomp'});
     };
+
+    // prevent default when dragging cookie over background
     document.body.ondragover = (event) => {
         event.preventDefault();
     };
@@ -53,6 +56,7 @@
             case 'showCorgi':{
                 IDLE_CORGI = message.text;
                 vscode.setState({...previousState, IDLE_CORGI});
+                corgi.src = IDLE_CORGI;
                 break;
             }
             case 'setSleepingCorgi':{
@@ -64,36 +68,33 @@
                 break;
             }
             case 'pet':{
-                let img = document.getElementById('corgi');
                 LOVING_CORGI = message.text;
                 vscode.setState({...previousState, LOVING_CORGI});
-                img.src = LOVING_CORGI;
+                corgi.src = LOVING_CORGI;
                 setTimeout(() => {
-                    img.src = IDLE_CORGI;
+                    corgi.src = IDLE_CORGI;
                 }, 1000);
 
                 break;
             }
             case 'sleep':{
-                let img = document.getElementById('corgi');
                 SLEEPING_CORGI = message.text;
                 vscode.setState({...previousState, SLEEPING_CORGI});
-                img.src = SLEEPING_CORGI;
+                corgi.src = SLEEPING_CORGI;
                 break;
             }
             case 'wake':{
-                let img = document.getElementById('corgi');
                 IDLE_CORGI = message.text;
                 vscode.setState({...previousState, IDLE_CORGI});
-                img.src = IDLE_CORGI;
+                corgi.src = IDLE_CORGI;
                 break;
             }
             case 'chomp':{
-                let img = document.getElementById('corgi');
                 CHOMPING_CORGI = message.text;
-                img.src = CHOMPING_CORGI;
+                vscode.setState({...previousState, CHOMPING_CORGI});
+                corgi.src = CHOMPING_CORGI;
                 setTimeout(() => {
-                    img.src = IDLE_CORGI;
+                    corgi.src = IDLE_CORGI;
                 }, 1000);
                 break;
             }
@@ -106,6 +107,7 @@
     }
     });
 }());
+
 
 function isSleepTime() {
     let now = new Date();
